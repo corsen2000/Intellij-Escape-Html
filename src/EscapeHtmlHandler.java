@@ -3,6 +3,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.command.UndoConfirmationPolicy;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
 import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
 
@@ -13,14 +14,16 @@ public class EscapeHtmlHandler extends EditorActionHandler {
             return;
         }
 
-        final String selectedText = editor.getSelectionModel().getSelectedText();
+        final SelectionModel selection = editor.getSelectionModel();
+
+        final String selectedText = selection.getSelectedText();
         if (selectedText == null) {
             return;
         }
         final String newText = escapeHtml(selectedText);
 
-        final int startPos = editor.getSelectionModel().getSelectionStart();
-        final int endPos = editor.getSelectionModel().getSelectionEnd();
+        final int startPos = selection.getSelectionStart();
+        final int endPos = selection.getSelectionEnd();
 
         CommandProcessor.getInstance().executeCommand(editor.getProject(), new Runnable() {
             @Override
